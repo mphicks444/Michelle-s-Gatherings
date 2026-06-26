@@ -1,0 +1,5 @@
+.next/
+node_modules/
+michelle_gatherings_extracted/
+.DS_Store
+*.log
