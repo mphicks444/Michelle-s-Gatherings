@@ -28,6 +28,33 @@ const PARTNER_TYPES = [
   "Other",
 ];
 
+const LEGAL = {
+  privacy: {
+    title: "Privacy Policy",
+    updated: "Last updated: July 2026",
+    body: [
+      ["Overview", "Michelle’s Gatherings (“we,” “us”) respects your privacy. This policy explains what we collect when you use this site or contact us, and how we use it. Please replace this placeholder text with your finalized policy before going live."],
+      ["What we collect", "When you submit the partner form we collect the name, email address, partnership type, and message you provide. If you join a guest list through a linked platform, that platform collects information under its own policy."],
+      ["How we use it", "We use your information only to respond to your inquiry, coordinate gatherings, and, if you opt in, send occasional updates. We do not sell your personal information."],
+      ["Sharing", "We share information only with trusted services that help us operate (for example, our email provider) and only as needed to provide what you’ve asked for."],
+      ["Your choices", "You may request access to, correction of, or deletion of your information at any time by emailing us. You can unsubscribe from updates whenever you like."],
+      ["Contact", "Questions about this policy? Email hello@michellesgatherings.com."],
+    ],
+  },
+  terms: {
+    title: "Terms & Conditions",
+    updated: "Last updated: July 2026",
+    body: [
+      ["Agreement", "By using this website you agree to these terms. Please replace this placeholder text with your finalized terms before going live."],
+      ["Use of the site", "This site is provided for information about Michelle’s Gatherings and to let you get in touch. You agree not to misuse the site or attempt to disrupt its operation."],
+      ["Events & attendance", "Details for gatherings, including dates, locations, and availability, may change. Requests to attend are not confirmed until you receive a confirmation from us. Additional terms may apply to specific events."],
+      ["Partnerships", "Submitting the partner form is an inquiry, not a binding agreement. Any partnership is subject to a separate written arrangement."],
+      ["Intellectual property", "All content on this site, including text, imagery, and branding, belongs to Michelle’s Gatherings unless otherwise noted, and may not be used without permission."],
+      ["Contact", "Questions about these terms? Email hello@michellesgatherings.com."],
+    ],
+  },
+};
+
 export default function Page() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -36,6 +63,9 @@ export default function Page() {
   const [form, setForm] = useState({ name: "", email: "", ptype: "", message: "" });
   const [introLifting, setIntroLifting] = useState(false);
   const [introDone, setIntroDone] = useState(false);
+  const [momentPage, setMomentPage] = useState(0);
+  const [momentPaused, setMomentPaused] = useState(false);
+  const [legalOpen, setLegalOpen] = useState(null);
 
   useEffect(() => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -59,11 +89,19 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
+    document.body.style.overflow = menuOpen || legalOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
-  }, [menuOpen]);
+  }, [menuOpen, legalOpen]);
+
+  useEffect(() => {
+    if (momentPaused) return;
+    const timer = setInterval(() => setMomentPage((page) => (page + 1) % MOMENTS.length), 4800);
+    return () => clearInterval(timer);
+  }, [momentPaused]);
+
+  const goMoments = (dir) => setMomentPage((page) => (page + dir + MOMENTS.length) % MOMENTS.length);
 
   const go = (href) => (event) => {
     event.preventDefault();
@@ -236,13 +274,39 @@ export default function Page() {
             <h2 className="display mom-title">A look at the<br />room when it's full.</h2>
             <p className="mom-copy">No stock photos, no borrowed glamour - just the actual nights. Drop in your favorite shots and let them speak.</p>
           </div>
-          <div className="mom-grid">
-            {MOMENTS.map((moment, i) => (
-              <div key={moment.src} className="mom-cell">
-                <img src={moment.src} alt={moment.alt} className="mom-img" />
-                <span className="mono mom-tag">{String(i + 1).padStart(2, "0")}</span>
+          <div
+            className="mom-carousel"
+            onMouseEnter={() => setMomentPaused(true)}
+            onMouseLeave={() => setMomentPaused(false)}
+          >
+            <div className="mom-row">
+              <button className="mom-arrow left" aria-label="Previous photos" onClick={() => goMoments(-1)}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+              </button>
+              <div className="mom-grid">
+                <MomentStage index={momentPage} />
+                <MomentStage index={(momentPage + 1) % MOMENTS.length} />
               </div>
-            ))}
+              <button className="mom-arrow right" aria-label="Next photos" onClick={() => goMoments(1)}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+              </button>
+            </div>
+            <div className="mom-foot">
+              <span className="mono faint">{String(momentPage + 1).padStart(2, "0")} / {String(MOMENTS.length).padStart(2, "0")}</span>
+              <div className="mom-dots">
+                {MOMENTS.map((moment, i) => (
+                  <button
+                    key={moment.src}
+                    aria-label={`Go to photo ${i + 1}`}
+                    className={`mom-dot ${i === momentPage ? "on" : ""}`}
+                    onClick={() => setMomentPage(i)}
+                  />
+                ))}
+              </div>
+              <span className="mono faint" aria-hidden="true" style={{ visibility: "hidden" }}>
+                {String(momentPage + 1).padStart(2, "0")} / {String(MOMENTS.length).padStart(2, "0")}
+              </span>
+            </div>
           </div>
         </section>
 
@@ -320,11 +384,64 @@ export default function Page() {
           </div>
           <div className="foot-bottom">
             <span className="mono faint">&copy; 2026 Michelle's Gatherings</span>
-            <span className="mono faint">Made with care</span>
+            <div className="foot-legal">
+              <button type="button" className="mono foot-legal-btn" onClick={() => setLegalOpen("privacy")}>Privacy Policy</button>
+              <span className="foot-legal-divide" />
+              <button type="button" className="mono foot-legal-btn" onClick={() => setLegalOpen("terms")}>Terms &amp; Conditions</button>
+            </div>
           </div>
         </footer>
       </main>
+
+      {legalOpen ? <PolicyModal which={legalOpen} onClose={() => setLegalOpen(null)} /> : null}
     </>
+  );
+}
+
+function PolicyModal({ which, onClose }) {
+  useEffect(() => {
+    const onKey = (event) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  const doc = LEGAL[which];
+  if (!doc) return null;
+
+  return (
+    <div className="legal-overlay" onClick={onClose}>
+      <div className="legal-sheet" onClick={(event) => event.stopPropagation()} role="dialog" aria-modal="true" aria-label={doc.title}>
+        <div className="legal-head">
+          <div>
+            <h3 className="display legal-title">{doc.title}</h3>
+            <span className="mono faint legal-updated">{doc.updated}</span>
+          </div>
+          <button onClick={onClose} className="mono legal-close" aria-label="Close">Close &times;</button>
+        </div>
+        <div className="legal-body">
+          {doc.body.map(([heading, paragraph]) => (
+            <div key={heading} className="legal-section">
+              <h4 className="mono legal-heading">{heading}</h4>
+              <p>{paragraph}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MomentStage({ index }) {
+  return (
+    <div className="mom-stage">
+      {MOMENTS.map((moment, i) => (
+        <div key={moment.src} className="mom-slide" style={{ opacity: i === index ? 1 : 0, pointerEvents: i === index ? "auto" : "none" }}>
+          <img src={moment.src} alt={moment.alt} className="mom-img" />
+        </div>
+      ))}
+    </div>
   );
 }
 
