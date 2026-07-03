@@ -34,6 +34,22 @@ export default function Page() {
   const [partnerState, setPartnerState] = useState("idle");
   const [partnerError, setPartnerError] = useState("");
   const [form, setForm] = useState({ name: "", email: "", ptype: "", message: "" });
+  const [introLifting, setIntroLifting] = useState(false);
+  const [introDone, setIntroDone] = useState(false);
+
+  useEffect(() => {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) {
+      setIntroDone(true);
+      return;
+    }
+    const liftTimer = setTimeout(() => setIntroLifting(true), 1700);
+    const doneTimer = setTimeout(() => setIntroDone(true), 1700 + 950);
+    return () => {
+      clearTimeout(liftTimer);
+      clearTimeout(doneTimer);
+    };
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -89,6 +105,22 @@ export default function Page() {
 
   return (
     <>
+      {!introDone && (
+        <div id="splash" className={introLifting ? "lift" : ""}>
+          <div className="intro-meta top mono">
+            <span>Worldwide</span>
+            <span>Est. 2019</span>
+          </div>
+          <Spark />
+          <div className="mark">Michelle&rsquo;s Gatherings</div>
+          <div className="bar"><i /></div>
+          <div className="intro-meta bot mono">
+            <span>Curated experiences</span>
+            <span>Setting the scene&hellip;</span>
+          </div>
+        </div>
+      )}
+
       <div className="gridlines" aria-hidden="true">
         <span className="v l" />
         <span className="v c" />
