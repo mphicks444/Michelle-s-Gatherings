@@ -104,7 +104,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .mom-tag{position:absolute;left:14px;top:12px;color:#fff;background:rgba(0,0,0,.4);padding:4px 8px;border-radius:3px;backdrop-filter:blur(4px);z-index:2}
 .spon-lede{font-size:clamp(18px,2vw,26px);font-weight:700;color:var(--muted);letter-spacing:-.01em;margin-bottom:clamp(24px,3vw,40px)}
 .spon-row{display:flex;flex-wrap:wrap;gap:clamp(14px,2vw,28px);align-items:stretch}
-.spon-cell{flex:0 0 auto;width:clamp(180px,22vw,260px);height:clamp(96px,11vw,124px);background:var(--bg-2);border:1px solid var(--line);border-radius:8px;padding:clamp(16px,1.6vw,24px)}
+.spon-cell{flex:0 0 auto;width:clamp(240px,26vw,340px);aspect-ratio:2/1}
 .spon-img{width:100%;height:100%;object-fit:contain}
 .partner-section{background:var(--accent);color:var(--on-accent)}
 .partner-grid{max-width:var(--maxw);margin:0 auto;padding:clamp(60px,9vh,128px) var(--pad);display:grid;grid-template-columns:1fr 1fr;gap:clamp(36px,5vw,90px);align-items:center}

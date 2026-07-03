@@ -9,7 +9,7 @@ const NAV_LINKS = [
   { label: "Contact", href: "#partner", n: "04" },
 ];
 
-const SPONSORS = [{ name: "Reitler", src: "/sponsor-reitler.svg" }];
+const SPONSORS = [{ name: "Reitler", src: "/sponsor-reitler.png" }];
 
 const MOMENTS = [
   { src: "/moment-1.webp", alt: "Guests gathered around a candlelit dinner table" },
