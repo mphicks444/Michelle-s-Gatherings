@@ -5,7 +5,16 @@ import { useEffect, useState } from "react";
 const NAV_LINKS = [
   { label: "Upcoming", href: "#upcoming", n: "01" },
   { label: "Moments", href: "#moments", n: "02" },
-  { label: "Partner", href: "#partner", n: "03" },
+  { label: "Partners", href: "#sponsors", n: "03" },
+  { label: "Contact", href: "#partner", n: "04" },
+];
+
+const SPONSORS = [{ name: "Reitler", src: "/sponsor-reitler.png" }];
+
+const MOMENTS = [
+  { src: "/moment-1.webp", alt: "Guests gathered around a candlelit dinner table" },
+  { src: "/moment-2.webp", alt: "Guests in a lounge beneath a sculptural octopus installation" },
+  { src: "/moment-3.webp", alt: "Guests at a panel discussion" },
 ];
 
 const PARTNER_ROLES = ["Venue / space", "Brand / sponsor", "Chef / maker / vendor", "Co-host", "Press"];
@@ -196,15 +205,31 @@ export default function Page() {
             <p className="mom-copy">No stock photos, no borrowed glamour - just the actual nights. Drop in your favorite shots and let them speak.</p>
           </div>
           <div className="mom-grid">
-            <div className="mom-cell"><div className="image-slot">Drop a photo from your first gathering</div><span className="mono mom-tag">01</span></div>
-            <div className="mom-cell"><div className="image-slot">Drop a photo from your second gathering</div><span className="mono mom-tag">02</span></div>
+            {MOMENTS.map((moment, i) => (
+              <div key={moment.src} className="mom-cell">
+                <img src={moment.src} alt={moment.alt} className="mom-img" />
+                <span className="mono mom-tag">{String(i + 1).padStart(2, "0")}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="sponsors" className="section">
+          <SectionLabel n="03" title="In good company" right="Partners & sponsors" />
+          <p className="display spon-lede">Proudly partnered with</p>
+          <div className="spon-row">
+            {SPONSORS.map((sponsor) => (
+              <div className="spon-cell" key={sponsor.name}>
+                <img src={sponsor.src} alt={sponsor.name} className="spon-img" />
+              </div>
+            ))}
           </div>
         </section>
 
         <section id="partner" className="partner-section">
           <div className="partner-grid">
             <div className="partner-left">
-              <span className="mono partner-kicker">03 - Partner with us</span>
+              <span className="mono partner-kicker">04 - Partner with us</span>
               <h2 className="display partner-title">Let's make<br />something<br />together.</h2>
               <p className="partner-copy">Whether you run a beautiful space, make something delicious, represent a brand, host your own gatherings, or write about them - I'd love to hear from you.</p>
               <div className="role-row">
@@ -246,7 +271,8 @@ export default function Page() {
                 <span className="mono faint">Explore</span>
                 <a href="#upcoming">Upcoming</a>
                 <a href="#moments">Moments</a>
-                <a href="#partner">Partner</a>
+                <a href="#sponsors">Partners</a>
+                <a href="#partner">Contact</a>
               </div>
               <div className="foot-col">
                 <span className="mono faint">Find us</span>
