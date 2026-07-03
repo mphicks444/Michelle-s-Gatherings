@@ -13,7 +13,7 @@ const SPONSORS = [{ name: "Reitler", src: "/sponsor-reitler.png" }];
 
 const MOMENTS = [
   { src: "/moment-1.webp", alt: "Guests gathered around a candlelit dinner table" },
-  { src: "/moment-2.webp", alt: "Guests in a lounge beneath a sculptural octopus installation" },
+  { src: "/moment-2.webp", alt: "Guests in a lounge beneath a sculptural octopus installation", focus: "50% 75%" },
   { src: "/moment-3.webp", alt: "Guests at a panel discussion" },
 ];
 
@@ -438,7 +438,7 @@ function MomentStage({ index }) {
     <div className="mom-stage">
       {MOMENTS.map((moment, i) => (
         <div key={moment.src} className="mom-slide" style={{ opacity: i === index ? 1 : 0, pointerEvents: i === index ? "auto" : "none" }}>
-          <img src={moment.src} alt={moment.alt} className="mom-img" />
+          <img src={moment.src} alt={moment.alt} className="mom-img" style={moment.focus ? { objectPosition: moment.focus } : undefined} />
         </div>
       ))}
     </div>
