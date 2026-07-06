@@ -15,6 +15,7 @@ const MOMENTS = [
   { src: "/moment-1.webp", alt: "Guests gathered around a candlelit dinner table" },
   { src: "/moment-2.webp", alt: "Guests in a lounge beneath a sculptural octopus installation", focus: "50% 75%" },
   { src: "/moment-3.webp", alt: "Guests at a panel discussion" },
+  { src: "/moment-4.webp", alt: "Guests applauding around the conference table" },
 ];
 
 const PARTNER_ROLES = ["Venue / space", "Brand / sponsor", "Chef / maker / vendor", "Co-host", "Press"];
